@@ -12,6 +12,7 @@
 #include <crsf/CRModel/TActorObject.h>
 #include <crsf/CRModel/TCharacter.h>
 #include <crsf/CRModel/TWorld.h>
+#include <crsf/CRModel/TCube.h>
 #include <crsf/CREngine/TAvatarEngine.h>
 #include <crsf/CREngine/TAvatarEngineConnector.h>
 #include <crsf/CREngine/TDynamicModuleManager.h>
@@ -57,6 +58,9 @@ void MainApp::OnStart()
     floor_ = std::make_unique<Floor>("floor",
         LMatrix4f::scale_mat(floor_scale) *
         LMatrix4f::translate_mat(0, 0, -floor_scale[3] / 2.0f));
+    floor_->setup_graphics();
+    floor_->setup_physics();
+    rendering_engine_->GetWorld()->AddWorldObject(floor_->get_object());
 
     setup_avatar();
     setup_chair();
