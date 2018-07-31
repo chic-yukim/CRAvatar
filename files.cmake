@@ -12,6 +12,7 @@ set(module_headers
 set(source_src
     "${PROJECT_SOURCE_DIR}/src/main.cpp"
     "${PROJECT_SOURCE_DIR}/src/main.hpp"
+    "${PROJECT_SOURCE_DIR}/src/main_gui.cpp"
     "${PROJECT_SOURCE_DIR}/src/openvr_manager.cpp"
     "${PROJECT_SOURCE_DIR}/src/openvr_manager.hpp"
 )

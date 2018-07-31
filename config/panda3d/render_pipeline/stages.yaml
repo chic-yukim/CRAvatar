@@ -60,6 +60,7 @@ global_stage_order:
   - ColorCorrectionStage
 
   # Finishing stages, do not insert anything below
+  - OpenVRRenderStage
   - UpscaleStage
   - FinalStage
   - UpdatePreviousPipesStage

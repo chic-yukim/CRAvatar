@@ -1,7 +1,5 @@
 #include "main.hpp"
 
-#include <imgui.h>
-
 #include <render_pipeline/rppanda/showbase/showbase.hpp>
 #include <render_pipeline/rpcore/render_pipeline.hpp>
 #include <render_pipeline/rpcore/loader.hpp>
@@ -37,16 +35,14 @@ void MainApp::OnLoad()
 
     rendering_engine_->SetWindowTitle(CRMODULE_ID_STRING);
 
-    // setup (mouse) controller
-    rendering_engine_->EnableControl();
-    rendering_engine_->SetControllerInitialPosHpr(
-        LVecBase3(0, -10, 1),
-        LVecBase3(0, 0, 0));
-    rendering_engine_->ResetControllerInitial();
-
     openvr_manager_ = std::make_unique<OpenVRManager>(*pipeline_);
     if (!openvr_manager_->is_available())
         openvr_manager_.reset();
+
+    rendering_engine_->EnableControl();
+    if (!openvr_manager_)
+        rendering_engine_->SetControllerInitialPosHpr(LVecBase3(0, -10, 1), LVecBase3(0, 0, 0));
+    rendering_engine_->ResetControllerInitial();
 }
 
 void MainApp::OnStart()
@@ -63,6 +59,7 @@ void MainApp::OnStart()
 
 void MainApp::OnExit()
 {
+    openvr_manager_.reset();
 }
 
 void MainApp::setup_avatar()
@@ -124,50 +121,6 @@ void MainApp::setup_chair()
     ikea_tullsta->SetHPR(35, 0, 0);
 }
 
-void MainApp::setup_gui()
-{
-    rppanda::Messenger::get_global_instance()->send(
-        "imgui-setup-context",
-        EventParameter(new rppanda::FunctionalTask([this](rppanda::FunctionalTask* task) {
-            ImGui::SetCurrentContext(std::static_pointer_cast<ImGuiContext>(task->get_user_data()).get());
-            accept("imgui-new-frame", [this](const Event*) { on_imgui_new_frame(); });
-            return AsyncTask::DS_done;
-        }, "MainApp::setup-imgui"))
-    );
-}
-
 void MainApp::update()
 {
-}
-
-void MainApp::on_imgui_new_frame()
-{
-    static bool window = true;
-
-    ImGui::Begin("CRAvatar", &window);
-
-    static ImGuiComboFlags comobo_flags = 0;
-    static std::string actor_name;
-    if (current_actor_)
-        actor_name = current_actor_->GetName();
-    if (ImGui::BeginCombo("Actors", actor_name.c_str(), comobo_flags))
-    {
-        for (const auto& actor : actors_)
-        {
-            bool is_selected = (current_actor_ == actor.get());
-            if (ImGui::Selectable(actor->GetName().c_str(), is_selected))
-            {
-                if (current_actor_)
-                    current_actor_->Hide();
-                current_actor_ = actor.get();
-                current_actor_->Show();
-            }
-
-            if (is_selected)
-                ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
-        }
-        ImGui::EndCombo();
-    }
-
-    ImGui::End();
 }
