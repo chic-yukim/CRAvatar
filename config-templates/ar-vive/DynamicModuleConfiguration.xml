@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modules>
+
+    <openvr>
+        <use_camera>true</use_camera>
+        <camera_name>vstcamera</camera_name>
+    </openvr>
+
+    <video_see_through>
+        <flip_y>true</flip_y>
+        <use_valid_vst_depth>false</use_valid_vst_depth>
+        <remove_occlusion>true</remove_occlusion>
+        <cameras>
+            <path>vstcamera</path>
+        </cameras>
+    </video_see_through>
+
+</modules>

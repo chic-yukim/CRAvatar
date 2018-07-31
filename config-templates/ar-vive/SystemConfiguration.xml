@@ -7,11 +7,14 @@
     <systemindex>1</systemindex>
 
     <dynamic_modules>
-<!--
         <module>
-            <id>KAIST_chair_motion</id>
+            <id>openvr</id>
         </module>
--->
+
+        <module>
+            <id>video_see_through</id>
+        </module>
+
         <application>
             <id>CRAvatar</id>
         </application>
