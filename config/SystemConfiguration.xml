@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system>
+    <logging>
+        <level>debug</level>
+    </logging>
+
+    <systemindex>1</systemindex>
+
+    <dynamic_modules>
+<!--
+        <module>
+            <id>KAIST_chair_motion</id>
+        </module>
+-->
+        <application>
+            <id>CRAvatar</id>
+        </application>
+    </dynamic_modules>
+</system>

@@ -1,0 +1,10 @@
+{
+    "information":
+    {
+        "category" : "application",
+        "name": "empty-prroject",
+        "author": "Younguk Kim <yukim@chic.re.kr>",
+        "version": "0.1",
+        "description": "Empty Project"
+    }
+}
