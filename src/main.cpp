@@ -81,7 +81,7 @@ void MainApp::setup_avatar()
         actor->GetMainCharacter()->MakeAllControlJoint();    // create joints
 
         crsf::TCRProperty avatar_props;
-        avatar_props.m_strName = "blonde";
+        avatar_props.m_strName = actor->GetName();
         avatar_props.m_propAvatar.SetJointNumber(71);
         crsf::TDynamicStageMemory::GetInstance()->CreateAvatarMemoryObject(avatar_props);
 
@@ -98,7 +98,7 @@ void MainApp::setup_avatar()
         actor->Hide();
 
         crsf::TCRProperty avatar_props;
-        avatar_props.m_strName = "AvatarMan";
+        avatar_props.m_strName = actor->GetName();
         avatar_props.m_propAvatar.SetJointNumber(71);
         crsf::TDynamicStageMemory::GetInstance()->CreateAvatarMemoryObject(avatar_props);
     }
