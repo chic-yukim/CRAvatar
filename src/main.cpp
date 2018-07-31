@@ -103,26 +103,19 @@ void MainApp::setup_avatar()
     axis_model.reparent_to(cr_world->GetNodePath());
     axis_model.set_scale(0.1f);
 
+    const GlobPattern glob_bam("**/*.bam");
+    const Filename model_dir("resources/models/avatars");
+    vector_string paths;
+    glob_bam.match_files(paths, model_dir);
+
+    const GlobPattern glob_egg("**/*.egg");
+    glob_egg.match_files(paths, model_dir);
+
+    for (const auto& path: paths)
     {
         auto actor = crsf::CreateObject<crsf::TActorObject>();
-        actor->CreateActor(rppanda::Actor::ModelsType("resources/models/chic/blonde/blonde.bam"));       // unit is cm
+        actor->CreateActor(rppanda::Actor::ModelsType(model_dir / path));       // unit is cm
         actor->SetScale(0.01f);
-        cr_world->AddWorldObject(actor);
-        actors_.push_back(actor);
-        actor->DisableTestBounding();
-        actor->GetMainCharacter()->MakeAllControlJoint();    // create joints
-
-        crsf::TCRProperty avatar_props;
-        avatar_props.m_strName = actor->GetName();
-        avatar_props.m_propAvatar.SetJointNumber(71);
-        crsf::TDynamicStageMemory::GetInstance()->CreateAvatarMemoryObject(avatar_props);
-
-        current_actor_ = actor.get();
-    }
-
-    {
-        auto actor = crsf::CreateObject<crsf::TActorObject>();
-        actor->CreateActor(rppanda::Actor::ModelsType("resources/models/chic/AvatarMan/avatarman_body.bam"));       // unit is meter
         cr_world->AddWorldObject(actor);
         actors_.push_back(actor);
         actor->DisableTestBounding();
@@ -134,6 +127,9 @@ void MainApp::setup_avatar()
         avatar_props.m_propAvatar.SetJointNumber(71);
         crsf::TDynamicStageMemory::GetInstance()->CreateAvatarMemoryObject(avatar_props);
     }
+
+    current_actor_ = actors_.front().get();
+    current_actor_->Show();
 }
 
 void MainApp::setup_chair()

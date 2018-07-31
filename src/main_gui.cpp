@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <fmt/format.h>
+
 #include <render_pipeline/rppanda/showbase/showbase.hpp>
 #include <render_pipeline/rpcore/render_pipeline.hpp>
 #include <render_pipeline/rpcore/util/primitives.hpp>
@@ -36,7 +38,9 @@ void MainApp::on_imgui_new_frame()
         for (const auto& actor : actors_)
         {
             bool is_selected = (current_actor_ == actor.get());
-            if (ImGui::Selectable(actor->GetName().c_str(), is_selected))
+
+            auto id = fmt::format("{}###{}", actor->GetName(), (void*)actor.get());
+            if (ImGui::Selectable(id.c_str(), is_selected))
             {
                 if (current_actor_)
                     current_actor_->Hide();
