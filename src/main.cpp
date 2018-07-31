@@ -15,7 +15,9 @@
 #include <crsf/CREngine/TAvatarEngine.h>
 #include <crsf/CREngine/TAvatarEngineConnector.h>
 #include <crsf/CREngine/TDynamicModuleManager.h>
+#include <crsf/CREngine/TPhysicsManager.h>
 
+#include "objects/floor.hpp"
 #include "openvr_manager.hpp"
 
 CRSEEDLIB_MODULE_CREATOR(MainApp);
@@ -26,7 +28,11 @@ spdlog::logger* global_logger = nullptr;
 MainApp::MainApp(): crsf::TDynamicModuleInterface(CRMODULE_ID_STRING)
 {
     global_logger = m_logger.get();
+
+    setup_physics();
 }
+
+MainApp::~MainApp() = default;
 
 void MainApp::OnLoad()
 {
@@ -47,6 +53,11 @@ void MainApp::OnLoad()
 
 void MainApp::OnStart()
 {
+    LVecBase3f floor_scale(15.0f, 15.0f, 0.02f);
+    floor_ = std::make_unique<Floor>("floor",
+        LMatrix4f::scale_mat(floor_scale) *
+        LMatrix4f::translate_mat(0, 0, -floor_scale[3] / 2.0f));
+
     setup_avatar();
     setup_chair();
     setup_gui();
@@ -55,11 +66,28 @@ void MainApp::OnStart()
         update();
         return AsyncTask::DoneStatus::DS_cont;
     }, "MainApp::update");
+
+    do_method_later(1.0f, [this](rppanda::FunctionalTask* task) {
+        crsf::TPhysicsManager::GetInstance()->Start();
+        return AsyncTask::DoneStatus::DS_done;
+    }, "MainApp::start_physics");
 }
 
 void MainApp::OnExit()
 {
+    // release some resources
+    floor_.reset();
+
     openvr_manager_.reset();
+
+    crsf::TPhysicsManager::GetInstance()->Exit();
+}
+
+void MainApp::setup_physics()
+{
+    crsf::TPhysicsManager* physics_manager = crsf::TPhysicsManager::GetInstance();
+    physics_manager->Init(crsf::EPHYX_ENGINE_BULLET);
+    physics_manager->SetGravity(LVecBase3(0.0f, 0.0f, -0.98f));
 }
 
 void MainApp::setup_avatar()

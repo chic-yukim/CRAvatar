@@ -13,17 +13,20 @@ class TActorObject;
 class TAvatarMemoryObject;
 }
 
+class Floor;
 class OpenVRManager;
 
 class MainApp : public crsf::TDynamicModuleInterface, public rppanda::DirectObject
 {
 public:
     MainApp();
+    virtual ~MainApp();
 
     void OnLoad() override;
     void OnStart() override;
     void OnExit() override;
 
+    void setup_physics();
     void setup_avatar();
     void setup_chair();
     void setup_gui();
@@ -38,6 +41,7 @@ private:
 
     std::unique_ptr<OpenVRManager> openvr_manager_;
 
+    std::unique_ptr<Floor> floor_;
     std::vector<std::shared_ptr<crsf::TActorObject>> actors_;
     crsf::TActorObject* current_actor_ = nullptr;
 };
