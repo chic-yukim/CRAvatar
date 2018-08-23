@@ -8,6 +8,10 @@
 
     <dynamic_modules>
         <module>
+            <id>crprofiler</id>
+        </module>
+
+        <module>
             <id>openvr</id>
         </module>
 

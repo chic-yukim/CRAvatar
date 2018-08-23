@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 
 set(CRMODULE_ID "CRAvatar")
 project(crmodule_${CRMODULE_ID}
@@ -23,6 +23,9 @@ set(CRMODULE_INSTALL_DIR "${CRMODULE_ID}")
 include(FindPackages)
 
 find_package(imgui CONFIG REQUIRED)
+
+set(ik_DIR "${PROJECT_SOURCE_DIR}/thirdparty/ik/vc${MSVC_TOOLSET_VERSION}/share/ik/cmake")
+find_package(ik CONFIG REQUIRED)
 
 render_pipeline_find_plugins("openvr;ar_render")
 # ==================================================================================================
@@ -61,6 +64,8 @@ target_link_libraries(${PROJECT_NAME}
     imgui::imgui
 
     rpplugins::openvr rpplugins::ar_render
+
+    ik
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

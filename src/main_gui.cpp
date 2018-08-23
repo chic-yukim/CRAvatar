@@ -9,7 +9,6 @@
 #include <render_pipeline/rpcore/util/primitives.hpp>
 
 #include <crsf/CRModel/TActorObject.h>
-#include <crsf/CRModel/TCharacter.h>
 
 void MainApp::setup_gui()
 {
@@ -41,12 +40,7 @@ void MainApp::on_imgui_new_frame()
 
             auto id = fmt::format("{}###{}", actor->GetName(), (void*)actor.get());
             if (ImGui::Selectable(id.c_str(), is_selected))
-            {
-                if (current_actor_)
-                    current_actor_->Hide();
-                current_actor_ = actor.get();
-                current_actor_->Show();
-            }
+                change_actor(actor.get());
 
             if (is_selected)
                 ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)

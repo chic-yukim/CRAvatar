@@ -7,6 +7,10 @@
     <systemindex>1</systemindex>
 
     <dynamic_modules>
+        <module>
+            <id>crprofiler</id>
+        </module>
+
         <application>
             <id>CRAvatar</id>
         </application>
