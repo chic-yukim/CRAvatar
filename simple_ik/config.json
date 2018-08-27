@@ -1,0 +1,10 @@
+{
+    "information":
+    {
+        "category" : "category",
+        "name": "Example Module",
+        "author": "name <email@email.com>",
+        "version": "0.1",
+        "description": "This is example for module."
+    }
+}

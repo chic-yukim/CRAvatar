@@ -24,10 +24,9 @@ include(FindPackages)
 
 find_package(imgui CONFIG REQUIRED)
 
-set(ik_DIR "${PROJECT_SOURCE_DIR}/thirdparty/ik/vc${MSVC_TOOLSET_VERSION}/share/ik/cmake")
-find_package(ik CONFIG REQUIRED)
-
 render_pipeline_find_plugins("openvr;ar_render")
+
+CRSeedLib_FIND_MODULES("simple_ik")
 # ==================================================================================================
 
 # === target =======================================================================================
@@ -64,12 +63,11 @@ target_link_libraries(${PROJECT_NAME}
     imgui::imgui
 
     rpplugins::openvr rpplugins::ar_render
-
-    ik
+    crmodule::simple_ik
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    FOLDER "MyProject"
+    FOLDER "CRAvatar"
     DEBUG_POSTFIX ${CRSeedLib_DEBUG_POSTFIX}
     RELWITHDEBINFO_POSTFIX ${CRSeedLib_RELWITHDEBINFO_POSTFIX}
     VERSION ${PROJECT_VERSION}

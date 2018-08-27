@@ -20,10 +20,10 @@
 #include <crsf/CREngine/TDynamicModuleManager.h>
 #include <crsf/CREngine/TPhysicsManager.h>
 
-#include <ik/ik.h>
-
 #include "objects/floor.hpp"
 #include "openvr_manager.hpp"
+
+#include "simple_ik/module.h"
 
 CRSEEDLIB_MODULE_CREATOR(MainApp);
 
@@ -89,8 +89,6 @@ void MainApp::OnExit()
 
     openvr_manager_.reset();
 
-    ik.deinit();
-
     crsf::TPhysicsManager::GetInstance()->Exit();
 }
 
@@ -103,37 +101,12 @@ void MainApp::setup_physics()
 
 void MainApp::setup_ik()
 {
-    if (ik.init() != IK_OK)
+    auto dmm = crsf::TDynamicModuleManager::GetInstance();
+    if (dmm->IsModuleEnabled("simple_ik"))
     {
-        global_logger->error("Failed to initialize IK");
-        return;
+        end_effector_ = rpcore::Globals::render.attach_new_node("effector");
+        simple_ik_ = std::dynamic_pointer_cast<SimpleIKModule>(dmm->GetModuleInstance("simple_ik")).get();
     }
-
-    /* Create a solver using the FABRIK algorithm */
-    ik_solver_ = ik.solver.create(IK_FABRIK);
-
-    /* Create a simple 3-bone structure */
-    ik_nodes_.push_back(ik_solver_->node->create(0));
-    ik_nodes_.back()->user_data = nullptr;
-    ik_nodes_.push_back(ik_solver_->node->create_child(ik_nodes_.back(), 1));
-    ik_nodes_.back()->user_data = nullptr;
-    ik_nodes_.push_back(ik_solver_->node->create_child(ik_nodes_.back(), 2));
-    ik_nodes_.back()->user_data = nullptr;
-    ik_nodes_.push_back(ik_solver_->node->create_child(ik_nodes_.back(), 3));
-    ik_nodes_.back()->user_data = nullptr;
-
-    /* Attach an effector at the end */
-    ik_effector_ = ik_solver_->effector->create();
-    ik_solver_->effector->attach(ik_effector_, ik_nodes_.back());
-
-    //ik_solver_->flags |= IK_ENABLE_TARGET_ROTATIONS;
-    ik_solver_->flags &= ~IK_ENABLE_JOINT_ROTATIONS;
-
-    /* Assign our tree to the solver, rebuild data and calculate solution */
-    ik.solver.set_tree(ik_solver_, ik_nodes_.front());
-    ik.solver.rebuild(ik_solver_);
-
-    np_effector_ = rpcore::Globals::render.attach_new_node("effector");
 }
 
 void MainApp::setup_avatar()
@@ -207,63 +180,11 @@ void MainApp::change_actor(crsf::TActorObject* new_actor)
 
     current_actor_ = new_actor;
 
-    rebuild_ik();
-
-    current_actor_->Show();
-}
-
-void MainApp::rebuild_ik()
-{
-    if (!current_actor_)
-        return;
-
-    r_acromioclavicular_ = current_actor_->GetNodePath().find("**/r_acromioclavicular");
-    if (!r_acromioclavicular_)
-        return;
-
-    actor_joints_.clear();
-    actor_joints_.reserve(ik_nodes_.size() * 2);     // prevent re-allocation
-
-    auto np = r_acromioclavicular_;
-    for (auto&& node : ik_nodes_)
+    if (simple_ik_)
     {
-        actor_joints_.push_back(np);
-
-        const auto pos = np.get_pos();
-        const auto quat = np.get_quat();
-        node->position = ik.vec3.vec3(pos[0], pos[1], pos[2]);
-        node->rotation = ik.quat.quat(quat.get_i(), quat.get_j(), quat.get_k(), quat.get_r());
-        node->user_data = &actor_joints_.back();
-        np = np.get_child(0);
+        simple_ik_->SetActor(current_actor_);
+        simple_ik_->SetEndEffector(end_effector_);
     }
 
-    ik.solver.update_distances(ik_solver_);
-
-    np_effector_.set_pos(actor_joints_.back().get_pos(rpcore::Globals::render));
-
-    static rppanda::FunctionalTask* update_ik_task = nullptr;
-
-    if (update_ik_task)
-        update_ik_task->remove();
-
-    update_ik_task = add_task([this](const rppanda::FunctionalTask* task) {
-        update_ik();
-        return AsyncTask::DoneStatus::DS_cont;
-    }, "MainApp::update_ik");
-}
-
-void MainApp::update_ik()
-{
-    const auto pos = np_effector_.get_pos(actor_joints_.front().get_parent());
-    ik_effector_->target_position = ik.vec3.vec3(pos[0], pos[1], pos[2]);
-
-    ik.solver.solve(ik_solver_);
-
-    ik.solver.iterate_affected_nodes(ik_solver_, [](ik_node_t* ikNode) {
-        if (!ikNode->user_data)
-            return;
-
-        NodePath* node = (NodePath*)ikNode->user_data;
-        node->set_pos(ikNode->position.x, ikNode->position.y, ikNode->position.z);
-    });
+    current_actor_->Show();
 }

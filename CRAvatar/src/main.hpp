@@ -17,10 +17,7 @@ class TAvatarMemoryObject;
 
 class Floor;
 class OpenVRManager;
-
-struct ik_solver_t;
-struct ik_effector_t;
-struct ik_node_t;
+class SimpleIKModule;
 
 class MainApp : public crsf::TDynamicModuleInterface, public rppanda::DirectObject
 {
@@ -44,8 +41,6 @@ private:
     void on_imgui_new_frame();
 
     void change_actor(crsf::TActorObject* new_actor);
-    void rebuild_ik();
-    void update_ik();
 
     crsf::TGraphicRenderEngine* rendering_engine_;
     rpcore::RenderPipeline* pipeline_;
@@ -56,10 +51,7 @@ private:
     std::vector<std::shared_ptr<crsf::TActorObject>> actors_;
     crsf::TActorObject* current_actor_ = nullptr;
 
-    ik_solver_t* ik_solver_ = nullptr;
-    ik_effector_t* ik_effector_ = nullptr;
-    std::vector<ik_node_t*> ik_nodes_;
-    std::vector<NodePath> actor_joints_;
-    NodePath np_effector_;
-    NodePath r_acromioclavicular_;
+    NodePath end_effector_;
+
+    SimpleIKModule* simple_ik_ = nullptr;
 };
