@@ -7,6 +7,7 @@
 
 namespace crsf {
 class TActorObject;
+class TAvatarMemoryObject;
 }
 
 struct ik_solver_t;
@@ -23,11 +24,16 @@ public:
     void OnExit() override;
 
     virtual void SetActor(crsf::TActorObject* actor);
-    virtual void SetEndEffector(NodePath np);
+    virtual void SetAvatarMemoryObject(crsf::TAvatarMemoryObject* amo);
+
+    void SetEndEffector(NodePath np);
+    void SetEndEffector(LVecBase3f* pos);
+
+    virtual void SolveIK();
+    virtual void StartSolveIKLoop();
+    virtual void StopSolveIKLoop();
 
 private:
-    void UpdateIK();
-
     ik_solver_t* ik_solver_ = nullptr;
     ik_effector_t* ik_effector_ = nullptr;
     std::vector<ik_node_t*> ik_nodes_;
@@ -35,6 +41,20 @@ private:
     rppanda::FunctionalTask* update_ik_task_ = nullptr;
 
     NodePath end_effector_;
+    LVecBase3f* end_effector_pos_ = nullptr;
+
+    bool use_actor_ = false;
     std::vector<NodePath> actor_joints_;
-    NodePath r_acromioclavicular_;
 };
+
+// ************************************************************************************************
+
+inline void SimpleIKModule::SetEndEffector(NodePath np)
+{
+    end_effector_ = np;
+}
+
+inline void SimpleIKModule::SetEndEffector(LVecBase3f* pos)
+{
+    end_effector_pos_ = pos;
+}

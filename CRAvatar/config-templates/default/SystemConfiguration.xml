@@ -11,6 +11,10 @@
             <id>crprofiler</id>
         </module>
 
+        <module>
+            <id>simple_ik</id>
+        </module>
+
         <application>
             <id>CRAvatar</id>
         </application>

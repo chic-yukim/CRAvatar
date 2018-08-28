@@ -184,6 +184,7 @@ void MainApp::change_actor(crsf::TActorObject* new_actor)
     {
         simple_ik_->SetActor(current_actor_);
         simple_ik_->SetEndEffector(end_effector_);
+        simple_ik_->StartSolveIKLoop();
     }
 
     current_actor_->Show();
