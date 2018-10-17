@@ -33,11 +33,12 @@ public:
     void setup_ik();
     void setup_avatar();
     void setup_chair();
-    void setup_gui();
 
     void update();
 
 private:
+    friend class MainGUI;
+
     void on_imgui_new_frame();
 
     void change_actor(crsf::TActorObject* new_actor);
@@ -54,4 +55,6 @@ private:
     NodePath trackers_[2];
 
     SimpleIKModule* simple_ik_ = nullptr;
+
+    std::unique_ptr<MainGUI> main_gui_;
 };

@@ -1,4 +1,4 @@
-#include "main.hpp"
+#include "main_gui/main_gui.hpp"
 
 #include <imgui.h>
 
@@ -10,7 +10,9 @@
 
 #include <crsf/CRModel/TActorObject.h>
 
-void MainApp::setup_gui()
+#include "main.hpp"
+
+MainGUI::MainGUI(MainApp& app) : app_(app)
 {
     rppanda::Messenger::get_global_instance()->send(
         "imgui-setup-context",
@@ -22,7 +24,9 @@ void MainApp::setup_gui()
     );
 }
 
-void MainApp::on_imgui_new_frame()
+MainGUI::~MainGUI() = default;
+
+void MainGUI::on_imgui_new_frame()
 {
     static bool window = true;
 
@@ -30,17 +34,17 @@ void MainApp::on_imgui_new_frame()
 
     static ImGuiComboFlags comobo_flags = 0;
     static std::string actor_name;
-    if (current_actor_)
-        actor_name = current_actor_->GetName();
+    if (app_.current_actor_)
+        actor_name = app_.current_actor_->GetName();
     if (ImGui::BeginCombo("Actors", actor_name.c_str(), comobo_flags))
     {
-        for (const auto& actor : actors_)
+        for (const auto& actor : app_.actors_)
         {
-            bool is_selected = (current_actor_ == actor.get());
+            bool is_selected = (app_.current_actor_ == actor.get());
 
             auto id = fmt::format("{}###{}", actor->GetName(), (void*)actor.get());
             if (ImGui::Selectable(id.c_str(), is_selected))
-                change_actor(actor.get());
+                app_.change_actor(actor.get());
 
             if (is_selected)
                 ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)

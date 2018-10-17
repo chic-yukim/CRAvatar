@@ -21,6 +21,7 @@
 #include <crsf/CREngine/TDynamicModuleManager.h>
 #include <crsf/CREngine/TPhysicsManager.h>
 
+#include "main_gui/main_gui.hpp"
 #include "objects/floor.hpp"
 #include "openvr_manager.hpp"
 
@@ -70,7 +71,8 @@ void MainApp::OnStart()
     setup_ik();
     setup_avatar();
     setup_chair();
-    setup_gui();
+
+    main_gui_ = std::make_unique<MainGUI>(*this);
 
     add_task([this](const rppanda::FunctionalTask* task) {
         update();
@@ -85,6 +87,8 @@ void MainApp::OnStart()
 
 void MainApp::OnExit()
 {
+    main_gui_.reset();
+
     // release some resources
     floor_.reset();
 
