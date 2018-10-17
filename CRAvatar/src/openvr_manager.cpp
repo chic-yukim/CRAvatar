@@ -139,6 +139,9 @@ void OpenVRManager::caching_devices()
     hmd_np_ = openvr_plugin_->get_device_node(vr::k_unTrackedDeviceIndex_Hmd);
     for (int k = vr::k_unTrackedDeviceIndex_Hmd + 1; k < vr::k_unMaxTrackedDeviceCount; ++k)
     {
+        if (!openvr_plugin_->get_vr_system()->IsTrackedDeviceConnected(k))
+            continue;
+
         auto np = openvr_plugin_->get_device_node(k);
         switch (openvr_plugin_->get_tracked_device_class(k))
         {

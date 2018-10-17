@@ -7,6 +7,7 @@
 #include <render_pipeline/rpcore/loader.hpp>
 #include <render_pipeline/rpcore/globals.hpp>
 #include <render_pipeline/rpcore/util/primitives.hpp>
+#include <render_pipeline/rpcore/util/rpgeomnode.hpp>
 
 #include <crsf/RenderingEngine/TGraphicRenderEngine.h>
 #include <crsf/CoexistenceInterface/TDynamicStageMemory.h>
@@ -101,10 +102,15 @@ void MainApp::setup_physics()
 
 void MainApp::setup_ik()
 {
+    crsf::TWorld* cr_world = rendering_engine_->GetWorld();
+
     auto dmm = crsf::TDynamicModuleManager::GetInstance();
     if (dmm->IsModuleEnabled("simple_ik"))
     {
-        end_effector_ = rpcore::Globals::render.attach_new_node("effector");
+        trackers_[0] = rpcore::RPLoader::load_model("resources/models/vr_tracker_vive.bam");
+        trackers_[0].reparent_to(cr_world->GetNodePath());
+        trackers_[1] = trackers_[0].copy_to(cr_world->GetNodePath());
+
         simple_ik_ = std::dynamic_pointer_cast<SimpleIKModule>(dmm->GetModuleInstance("simple_ik")).get();
     }
 }
@@ -183,7 +189,7 @@ void MainApp::change_actor(crsf::TActorObject* new_actor)
     if (simple_ik_)
     {
         simple_ik_->SetActor(current_actor_);
-        simple_ik_->SetEndEffector(end_effector_);
+        simple_ik_->SetEndEffector(trackers_[0]);
         simple_ik_->StartSolveIKLoop();
     }
 

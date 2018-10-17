@@ -23,6 +23,7 @@ set(CRMODULE_INSTALL_DIR "${CRMODULE_ID}")
 include(FindPackages)
 
 find_package(imgui CONFIG REQUIRED)
+set_target_properties(imgui::imgui PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO RELEASE)
 
 render_pipeline_find_plugins("openvr;ar_render")
 

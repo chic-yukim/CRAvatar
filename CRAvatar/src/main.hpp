@@ -51,7 +51,7 @@ private:
     std::vector<std::shared_ptr<crsf::TActorObject>> actors_;
     crsf::TActorObject* current_actor_ = nullptr;
 
-    NodePath end_effector_;
+    NodePath trackers_[2];
 
     SimpleIKModule* simple_ik_ = nullptr;
 };
