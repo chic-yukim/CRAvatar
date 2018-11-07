@@ -20,6 +20,8 @@ set(source_src_objects
 )
 
 set(source_src
+    "${PROJECT_SOURCE_DIR}/src/ar_system.cpp"
+    "${PROJECT_SOURCE_DIR}/src/ar_system.hpp"
     "${PROJECT_SOURCE_DIR}/src/main.cpp"
     "${PROJECT_SOURCE_DIR}/src/main.hpp"
     "${PROJECT_SOURCE_DIR}/src/openvr_manager.cpp"

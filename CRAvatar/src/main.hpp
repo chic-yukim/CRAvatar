@@ -17,6 +17,7 @@ class TAvatarMemoryObject;
 
 class Floor;
 class OpenVRManager;
+class ARSystem;
 class SimpleIKModule;
 
 class MainApp : public crsf::TDynamicModuleInterface, public rppanda::DirectObject
@@ -39,14 +40,13 @@ public:
 private:
     friend class MainGUI;
 
-    void on_imgui_new_frame();
-
     void change_actor(crsf::TActorObject* new_actor);
 
     crsf::TGraphicRenderEngine* rendering_engine_;
     rpcore::RenderPipeline* pipeline_;
 
     std::unique_ptr<OpenVRManager> openvr_manager_;
+    std::unique_ptr<ARSystem> ar_system_;
 
     std::unique_ptr<Floor> floor_;
     std::vector<std::shared_ptr<crsf::TActorObject>> actors_;

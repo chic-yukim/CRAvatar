@@ -35,6 +35,7 @@ enabled:
     - env_probes
     - ar_render
     - imgui
+    - rpstat
 
 
 overrides:

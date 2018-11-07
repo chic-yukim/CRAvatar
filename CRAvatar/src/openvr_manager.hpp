@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <render_pipeline/rppanda/gui/onscreen_text.hpp>
+#include <nodePath.h>
+
 #include <render_pipeline/rppanda/showbase/direct_object.hpp>
 
 #include <openvr.h>
@@ -29,13 +30,9 @@ public:
 
     rpplugins::OpenVRPlugin* get_plugin() const;
 
-    void print_serials();
-
     void toggle_ar();
 
-    void create_devices_label();
-
-    void create_text2d();
+    void load_models();
 
     NodePath get_hmd_nodepath() const;
     const std::vector<NodePath>& get_basestation_nodepaths() const;
@@ -45,19 +42,19 @@ public:
 private:
     void caching_devices();
     void process_controller_event();
-    void update_texts();
 
     rpcore::RenderPipeline& pipeline_;
     rpplugins::OpenVRPlugin* openvr_plugin_ = nullptr;
 
     uint64_t controller_last_states_[vr::k_unMaxTrackedDeviceCount];
 
-    std::vector<rppanda::OnscreenText> texts_;
-
     NodePath hmd_np_;
     std::vector<NodePath> basestation_np_list_;
     std::vector<NodePath> controller_np_list_;
     std::vector<NodePath> tracker_np_list_;
+
+    NodePath model_root_;
+    std::unordered_map<vr::TrackedDeviceIndex_t, NodePath> models_;
 };
 
 inline bool OpenVRManager::is_available() const

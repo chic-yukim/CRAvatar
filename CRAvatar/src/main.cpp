@@ -8,6 +8,7 @@
 #include <render_pipeline/rpcore/globals.hpp>
 #include <render_pipeline/rpcore/util/primitives.hpp>
 #include <render_pipeline/rpcore/util/rpgeomnode.hpp>
+#include <render_pipeline/rpcore/pluginbase/manager.hpp>
 
 #include <crsf/RenderingEngine/TGraphicRenderEngine.h>
 #include <crsf/CoexistenceInterface/TDynamicStageMemory.h>
@@ -45,12 +46,16 @@ void MainApp::OnLoad()
 {
     rendering_engine_ = crsf::TGraphicRenderEngine::GetInstance();
     pipeline_ = rendering_engine_->GetRenderPipeline();
+    auto plugin_mgr = pipeline_->get_plugin_mgr();
 
     rendering_engine_->SetWindowTitle(CRMODULE_ID_STRING);
 
     openvr_manager_ = std::make_unique<OpenVRManager>(*pipeline_);
     if (!openvr_manager_->is_available())
         openvr_manager_.reset();
+
+    if (plugin_mgr->is_plugin_enabled("ar_render"))
+        ar_system_ = std::make_unique<ARSystem>(*pipeline_);
 
     rendering_engine_->EnableControl();
     if (!openvr_manager_)
@@ -128,18 +133,24 @@ void MainApp::setup_avatar()
     axis_model.reparent_to(cr_world->GetNodePath());
     axis_model.set_scale(0.1f);
 
-    const GlobPattern glob_bam("**/*.bam");
-    const Filename model_dir("resources/models/avatars");
-    vector_string paths;
-    glob_bam.match_files(paths, model_dir);
+    const Filename model_base_dir("resources/models/avatars");
 
-    const GlobPattern glob_egg("**/*.egg");
-    glob_egg.match_files(paths, model_dir);
+    vector_string paths;
+    if (!model_base_dir.scan_directory(paths))
+        return;
 
     for (const auto& path: paths)
     {
+        Filename model_file = model_base_dir / path / (path + ".bam");
+        if (!model_file.exists())
+        {
+            model_file = model_base_dir / path / (path + ".egg");
+            if (!model_file.exists())
+                continue;
+        }
+
         auto actor = crsf::CreateObject<crsf::TActorObject>();
-        actor->CreateActor(rppanda::Actor::ModelsType(model_dir / path));       // unit is cm
+        actor->CreateActor(rppanda::Actor::ModelsType(model_file));       // unit is cm
         actor->SetScale(0.01f);
         cr_world->AddWorldObject(actor);
         actors_.push_back(actor);
