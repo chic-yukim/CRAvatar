@@ -24,7 +24,7 @@ class MainApp : public crsf::TDynamicModuleInterface, public rppanda::DirectObje
 {
 public:
     MainApp();
-    virtual ~MainApp();
+    ~MainApp() override;
 
     void OnLoad() override;
     void OnStart() override;

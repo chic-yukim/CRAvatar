@@ -25,6 +25,7 @@
 #include "main_gui/main_gui.hpp"
 #include "objects/floor.hpp"
 #include "openvr_manager.hpp"
+#include "ar_system.hpp"
 
 #include "simple_ik/module.h"
 

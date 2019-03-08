@@ -86,12 +86,8 @@ install(TARGETS ${PROJECT_NAME} DESTINATION ${CRMODULE_ID})
 
 # install module files.
 install(FILES "${PROJECT_SOURCE_DIR}/config.json" DESTINATION ${CRMODULE_ID} CONFIGURATIONS Release)
-if(EXISTS "${PROJECT_SOURCE_DIR}/resources")
-    install(DIRECTORY "${PROJECT_SOURCE_DIR}/resources" DESTINATION ${CRMODULE_ID} CONFIGURATIONS Release)
-endif()
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/resources" DESTINATION ${CRMODULE_ID} OPTIONAL CONFIGURATIONS Release)
 
 # install application files
-if(EXISTS "${PROJECT_SOURCE_DIR}/config")
-    install(DIRECTORY "${PROJECT_SOURCE_DIR}/config" DESTINATION ${CRMODULE_ID})
-endif()
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/config" DESTINATION ${CRMODULE_ID} OPTIONAL)
 # ==================================================================================================

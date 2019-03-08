@@ -15,7 +15,11 @@
 #include <render_pipeline/rppanda/showbase/showbase.hpp>
 #include <render_pipeline/rpcore/loader.hpp>
 
+#if _MSC_VER > 1900
+#include <rpplugins/openvr/plugin.hpp>
+#else
 #include <openvr_plugin.hpp>
+#endif
 
 #include <crsf/CRModel/TWorldObject.h>
 
@@ -143,6 +147,7 @@ void OpenVRManager::load_models()
     model_root_ = pipeline_.get_showbase()->get_render().attach_new_node("openvr_models");
     model_root_.set_scale(openvr_plugin_->get_distance_scale());
 
+#if _MSC_VER > 1900
     for (vr::TrackedDeviceIndex_t unDevice = 1; unDevice < vr::k_unMaxTrackedDeviceCount; unDevice++)
     {
         if (!openvr_plugin_->is_tracked_device_connected(unDevice))
@@ -152,4 +157,5 @@ void OpenVRManager::load_models()
         models_[unDevice] = openvr_plugin_->load_model(unDevice);
         models_[unDevice].reparent_to(model_root_);
     }
+#endif
 }
