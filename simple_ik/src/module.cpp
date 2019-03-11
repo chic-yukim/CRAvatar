@@ -160,7 +160,9 @@ void SimpleIKModule::SolveIK()
                 return;
 
             crsf::TAvatarMemoryObject* amo = (crsf::TAvatarMemoryObject*)ikNode->user_data;
-            amo->GetAvatarMemory()[ikNode->guid].SetPosition(LVecBase3f(ikNode->position.x, ikNode->position.y, ikNode->position.z));
+            auto pose = amo->GetAvatarMemory(ikNode->guid);
+            pose.SetPosition(LVecBase3f(ikNode->position.x, ikNode->position.y, ikNode->position.z));
+            amo->SetAvatarMemory(ikNode->guid, pose);
         });
     }
 }
