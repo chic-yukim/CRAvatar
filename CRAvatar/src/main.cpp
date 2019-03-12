@@ -17,8 +17,6 @@
 #include <crsf/CRModel/TCharacter.h>
 #include <crsf/CRModel/TWorld.h>
 #include <crsf/CRModel/TCube.h>
-#include <crsf/CREngine/TAvatarEngine.h>
-#include <crsf/CREngine/TAvatarEngineConnector.h>
 #include <crsf/CREngine/TDynamicModuleManager.h>
 #include <crsf/CREngine/TPhysicsManager.h>
 
