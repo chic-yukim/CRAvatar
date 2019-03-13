@@ -14,5 +14,8 @@ public:
 private:
     void on_imgui_new_frame();
 
+    void setup_foot_mouse();
+    void ui_foot_mouse();
+
     MainApp& app_;
 };

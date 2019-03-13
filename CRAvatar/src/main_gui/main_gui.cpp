@@ -22,6 +22,8 @@ MainGUI::MainGUI(MainApp& app) : app_(app)
             return AsyncTask::DS_done;
         }, "MainApp::setup-imgui"))
     );
+
+    setup_foot_mouse();
 }
 
 MainGUI::~MainGUI() = default;
@@ -51,6 +53,8 @@ void MainGUI::on_imgui_new_frame()
         }
         ImGui::EndCombo();
     }
+
+    ui_foot_mouse();
 
     ImGui::End();
 }

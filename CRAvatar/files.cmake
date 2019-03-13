@@ -10,6 +10,7 @@ set(module_headers
 )
 
 set(source_src_main_gui
+    "${PROJECT_SOURCE_DIR}/src/main_gui/foot_mouse_gui.cpp"
     "${PROJECT_SOURCE_DIR}/src/main_gui/main_gui.cpp"
     "${PROJECT_SOURCE_DIR}/src/main_gui/main_gui.hpp"
 )

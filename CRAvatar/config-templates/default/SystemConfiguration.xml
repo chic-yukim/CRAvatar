@@ -15,6 +15,10 @@
             <id>simple_ik</id>
         </module>
 
+        <module>
+            <id>foot_mouse</id>
+        </module>
+
         <application>
             <id>CRAvatar</id>
         </application>

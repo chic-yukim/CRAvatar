@@ -27,7 +27,7 @@ set_target_properties(imgui::imgui PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO
 
 render_pipeline_find_plugins("openvr;ar_render")
 
-CRSeedLib_FIND_MODULES("simple_ik")
+CRSeedLib_FIND_MODULES("simple_ik;foot_mouse")
 # ==================================================================================================
 
 # === target =======================================================================================
@@ -65,6 +65,7 @@ target_link_libraries(${PROJECT_NAME}
 
     rpplugins::openvr rpplugins::ar_render
     crmodule::simple_ik
+    crmodule::foot_mouse
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
