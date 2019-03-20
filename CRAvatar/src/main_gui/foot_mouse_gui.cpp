@@ -119,24 +119,14 @@ void MainGUI::ui_foot_mouse()
 
     ImGui::LabelText("Motion Command", "%s", convert_to_string(motion_data.command));
 
-    if (ImGui::Button("Vibrate Right Walk"))
+    if (ImGui::Button("Vibrate Left"))
     {
-        foot_mouse_module->SendRightFootHapticVibForWalk();
+        foot_mouse_module->SendHapticVibration(FootMouseModule::FootIndex::FOOT_INDEX_RIGHT);
     }
 
-    if (ImGui::Button("Vibrate Right Run"))
+    if (ImGui::Button("Vibrate Right"))
     {
-        foot_mouse_module->SendRightFootHapticVibForRun();
-    }
-
-    if (ImGui::Button("Vibrate Left Walk"))
-    {
-        foot_mouse_module->SendLeftFootHapticVibForWalk();
-    }
-
-    if (ImGui::Button("Vibrate Left Run"))
-    {
-        foot_mouse_module->SendLeftFootHapticVibForRun();
+        foot_mouse_module->SendHapticVibration(FootMouseModule::FootIndex::FOOT_INDEX_RIGHT);
     }
 
     int data_window_size = static_cast<int>(foot_mouse_module->GetDataWindowSize());

@@ -18,6 +18,10 @@
         <module>
             <id>video_see_through</id>
         </module>
+        
+        <module>
+            <id>foot_mouse</id>
+        </module>
 
         <application>
             <id>CRAvatar</id>
