@@ -121,7 +121,7 @@ void MainGUI::ui_foot_mouse()
 
     if (ImGui::Button("Vibrate Left"))
     {
-        foot_mouse_module->SendHapticVibration(FootMouseModule::FootIndex::FOOT_INDEX_RIGHT);
+        foot_mouse_module->SendHapticVibration(FootMouseModule::FootIndex::FOOT_INDEX_LEFT);
     }
 
     if (ImGui::Button("Vibrate Right"))
