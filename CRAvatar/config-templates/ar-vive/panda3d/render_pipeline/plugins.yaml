@@ -213,6 +213,5 @@ overrides:
         specular_cone_steps: 150
 
     openvr:
-        openvr_sdk_path: /$$crsf/thirdparty/openvr
         supersample_mode: force
         supersample_scale: 1.0
